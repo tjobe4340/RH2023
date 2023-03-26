@@ -38,6 +38,7 @@ typedef struct Player {
     Position loc;
     int level; //xp level
     int xp;
+    int count;
     int health;
     int max_health;
     int running;

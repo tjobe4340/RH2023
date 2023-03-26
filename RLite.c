@@ -11,6 +11,7 @@ Player player_init(){
     player.attack = 10;
     player.xp = 0;
     player.level = 1;
+    player.count=0;
     return player;
 }
 Monster monster_init(){
@@ -165,6 +166,14 @@ Player move_player(Player player, Level* level, char answer[]){
         level->map[player.loc.y][player.loc.x] = ' ';
         level->map[temp.y][temp.x] = 'P';
         player.loc = temp;
+
+        if(empty_dungeon(level) == 0){
+            printf("Congrats! You slayed all the enemies\n");
+            char temp[10];
+            printf("Press q and then press enter to exit game\n");
+            scanf("%s", temp);
+            exit(-1);
+        }
     }
     return player;
 }
@@ -256,13 +265,6 @@ Player battle(Player player, Level* level){
             monster.health=0;
             printf("You did it! The monster is dead!\n");
             player.xp += monster.type;
-            if(empty_dungeon(level) == 0){
-                printf("Congrats! You slayed all the enemies\n");
-                char temp[10];
-                printf("Press q and then press enter to exit game\n");
-                scanf("%s", temp);
-                exit(-1);
-            }
             break;
         }
         //attack
