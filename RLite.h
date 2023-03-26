@@ -7,7 +7,6 @@
 #include <time.h>
 #include <windows.h>
 
-#define MAX_MAP_SIZE 8;
 
 typedef struct Position{
     int x;
@@ -41,6 +40,7 @@ typedef struct Player {
     int xp;
     int health;
     int max_health;
+    int running;
     int attack;//modify w/equipment later
 }Player;
 
@@ -57,7 +57,7 @@ Player battle(Player, Level*);
 void print_player_battle_stats();
 void print_enemy_battle_stats();
 void cls_screen();
-
+int empty_dungeon(Level*);
 /*ideas methods
 void dfs(int, int, char**, int**, int[], int, int );
 void make_maze(Level*,int,int);*/

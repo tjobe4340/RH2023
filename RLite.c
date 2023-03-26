@@ -33,19 +33,52 @@ Level* level_init(){
 }
 
 void init_maps(Level* levels){
-    //Level1
-    strcpy(levels->map[0], "################");
-    strcpy(levels->map[1], "#   E          #");
-    strcpy(levels->map[2], "#  ### #########");
-    strcpy(levels->map[3], "#P #  E    T  ##");
-    strcpy(levels->map[4], "#  #T    # ##  #");
-    strcpy(levels->map[5], "#  ####### HH E#");
-    strcpy(levels->map[6], "####       E   #");
-    strcpy(levels->map[7], "#       ########");
-    strcpy(levels->map[8], "#   H   H   H  #");
-    strcpy(levels->map[9], "#   E   E   E  #");
-    strcpy(levels->map[10], "#              #");
-    strcpy(levels->map[11], "################");
+    int dungeon = rand() % 1;
+    switch(dungeon){
+        case 0:
+            //Level1
+            strcpy(levels->map[0], "################");
+            strcpy(levels->map[1], "#   E          #");
+            strcpy(levels->map[2], "#  ### #########");
+            strcpy(levels->map[3], "#P #  E    T  ##");
+            strcpy(levels->map[4], "#  #T    # ##  #");
+            strcpy(levels->map[5], "#  ####### HH E#");
+            strcpy(levels->map[6], "####       E   #");
+            strcpy(levels->map[7], "#       ########");
+            strcpy(levels->map[8], "#   H   H   H  #");
+            strcpy(levels->map[9], "#              #");
+            strcpy(levels->map[10], "#              #");
+            strcpy(levels->map[11], "################");
+            break;
+        case 1:
+            strcpy(levels->map[0], "################");
+            strcpy(levels->map[1], "#   E          #");
+            strcpy(levels->map[2], "#  ### #########");
+            strcpy(levels->map[3], "#P #  E    T  ##");
+            strcpy(levels->map[4], "#  #T    # ##  #");
+            strcpy(levels->map[5], "#  ####### HH E#");
+            strcpy(levels->map[6], "####       E   #");
+            strcpy(levels->map[7], "#       ########");
+            strcpy(levels->map[8], "#   H   H   H  #");
+            strcpy(levels->map[9], "#   E   E   E  #");
+            strcpy(levels->map[10], "#              #");
+            strcpy(levels->map[11], "################");
+            break;
+
+            /*#################
+            #     #         #
+            ### # # ### ### #
+            #   #   #     # #
+            # ### ### ##### #
+            #   #   # #     #
+            ### ### # # ### #
+            #     # # # #   #
+            # ### # # # # ###
+            # #   #   # #   #
+            # # ##### # ### #
+            #         #     #
+            #################*/
+    }
 }
     
 
@@ -119,7 +152,11 @@ Player move_player(Player player, Level* level, char answer[]){
         }
         else if(level->map[temp.y][temp.x] == 'E'){
             //calling fight
+            player.running = 0;
             player = battle(player,level);
+            if(player.running == 1){
+                return player;
+            }
         }
         else if(level->map[temp.y][temp.x] == 'H'){
             //player lands on heal pad
@@ -145,15 +182,16 @@ Player collect_treasure(Player player, Level* level){
     player.gold += treasure;
     return player;
 }
+
 int run_away(Level* level, Player player){
-    Position diff;
-    diff.x = rand() % 3 - 1;
-    diff.y = rand() % 3 - 1;
-    Position temp = player.loc;
-    temp.x += diff.x;
-    temp.y += diff.y;
-    if(level->map[temp.y][temp.x] != '#' ){
-        player.loc = temp;
+    Position diff1;
+    diff1.x = rand() % 3 - 1;
+    diff1.y = rand() % 3 - 1;
+    Position temp1 = player.loc;
+    temp1.x += diff1.x;
+    temp1.y += diff1.y;
+    if(level->map[temp1.y][temp1.x] != '#' && level->map[temp1.y][temp1.x] != 'E'){
+        //player.loc = temp;
         return 1;
     }else{
         return 0;
@@ -184,6 +222,7 @@ Player battle(Player player, Level* level){
                 //return true >1 or false
                 if(run_away(level, player)){
                     printf("Successfully ran");
+                    player.running = 1;
                     return player;
                 }
                 else{
@@ -217,6 +256,13 @@ Player battle(Player player, Level* level){
             monster.health=0;
             printf("You did it! The monster is dead!\n");
             player.xp += monster.type;
+            if(empty_dungeon(level) == 0){
+                printf("Congrats! You slayed all the enemies\n");
+                char temp[10];
+                printf("Press q and then press enter to exit game\n");
+                scanf("%s", temp);
+                exit(-1);
+            }
             break;
         }
         //attack
@@ -248,10 +294,10 @@ void print_player_battle_stats(Player player){
     printf("+--------------------+\n");
     printf("|");
     int i;
-    for(i=0; i < (player.health*20.0/player.max_health); i++){
+    for(i=0; i < min(player.health*20.0/player.max_health,20); i++){
         printf("-");
     }
-    for(i=0; i < (20-(player.health*20.0/player.max_health)); i++){
+    for(i=0; i < max(20-(player.health*20.0/player.max_health),0); i++){
         printf(" ");
     }
     printf("|\n");
@@ -276,7 +322,17 @@ void print_enemy_battle_stats(Monster monster){
     //printf(" Attack: %d\n", attack);
     //printf(" Defense: %d\n", defense);
 }
-
+int empty_dungeon(Level* level){
+    int i,j,enemies = 0;
+    for(i=0;i<12;i++){
+        for(j=0;j<18;j++){
+            if(level->map[i][j] == 'E'){
+                enemies+=1;
+            }
+        }
+    }
+    return enemies;
+}
 void cls_screen(){
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 }
