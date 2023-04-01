@@ -5,8 +5,6 @@
 #include <signal.h>
 #include <ctype.h>
 #include <time.h>
-#include <windows.h>
-
 
 typedef struct Position{
     int x;
@@ -59,6 +57,8 @@ void print_player_battle_stats();
 void print_enemy_battle_stats();
 void cls_screen();
 int empty_dungeon(Level*);
+int min(int, int);
+int max(int, int);
 /*ideas methods
 void dfs(int, int, char**, int**, int[], int, int );
 void make_maze(Level*,int,int);*/

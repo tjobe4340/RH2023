@@ -338,3 +338,9 @@ int empty_dungeon(Level* level){
 void cls_screen(){
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 }
+int min(int a, int b){
+    return (a < b ? a : b);
+}
+int max(int a, int b){
+    return (a > b ? a : b);
+}
