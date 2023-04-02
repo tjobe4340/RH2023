@@ -37,6 +37,11 @@ int main (){
         }
         printf("\033[38;5;%d;48;5;0m%s \033[0m",i, ENEMY);
     }
+    //basic formating above is \033[<style>;<foreground color>;<background color>
+        //This is limiting to what colors you can print. You choose from only 7 or 8 options
+    //Format is  \033[38;<foreground style>;<forecground color>;48;<background style>;<bakckground color>m
+        //this allows for 256 diffferent color options
+    //clear format to default with \033[0m
     printf("\n\033[38;5;29;48;5;0mTHIS IS A TEST\033[0m\n");
     printf("\033[38;5;95;48;5;0m%s\033[0m\n",WALL);
     printf("\033[38;5;31;48;5;0m%s\033[0m\n",PLAYER);
