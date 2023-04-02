@@ -1,10 +1,13 @@
 #include "RLite.h"
 
+char WALL[] = "\u258B"; // 'Left five eighths block' unicode character
+char PLAYER[] = "\u2609"; // 'sun' unicode character
+char TREASURE[] = "\u25A3"; // 'White square containing small black square' unicode character
+char ENEMY[] = "\u25C8"; // 'White diamond containing small black diamond'
+//possible enemies ⍒,☠
+
 Player player_init(){
     Player player;
-    player.loc;
-    player.loc.x = 1;
-    player.loc.y = 3;
     player.gold = 0;
     player.health = 100;
     player.max_health = 100;
@@ -16,11 +19,11 @@ Player player_init(){
 }
 Monster monster_init(){
     Monster monster;
+    //The difficulty of the monster to scale attack/health
     monster.type = (rand()) % 20 + 1;
     monster.health = 20 + monster.type;
     monster.max_health = monster.health;
     monster.attack = monster.type + 9;
-
     return monster;
 }
 Level* level_init(){
@@ -47,49 +50,50 @@ void init_maps(Level* levels){
             strcpy(levels->map[6], "####       E   #");
             strcpy(levels->map[7], "#       ########");
             strcpy(levels->map[8], "#   H   H   H  #");
-            strcpy(levels->map[9], "#              #");
-            strcpy(levels->map[10], "#              #");
-            strcpy(levels->map[11], "################");
-            break;
-        case 1:
-            strcpy(levels->map[0], "################");
-            strcpy(levels->map[1], "#   E          #");
-            strcpy(levels->map[2], "#  ### #########");
-            strcpy(levels->map[3], "#P #  E    T  ##");
-            strcpy(levels->map[4], "#  #T    # ##  #");
-            strcpy(levels->map[5], "#  ####### HH E#");
-            strcpy(levels->map[6], "####       E   #");
-            strcpy(levels->map[7], "#       ########");
-            strcpy(levels->map[8], "#   H   H   H  #");
             strcpy(levels->map[9], "#   E   E   E  #");
             strcpy(levels->map[10], "#              #");
             strcpy(levels->map[11], "################");
             break;
-
-            /*#################
-            #     #         #
-            ### # # ### ### #
-            #   #   #     # #
-            # ### ### ##### #
-            #   #   # #     #
-            ### ### # # ### #
-            #     # # # #   #
-            # ### # # # # ###
-            # #   #   # #   #
-            # # ##### # ### #
-            #         #     #
-            #################*/
+        case 1:
+            strcpy(levels->map[0], "1111111111111111");
+            strcpy(levels->map[1], "1   3          1");
+            strcpy(levels->map[2], "1  111 111111111");
+            strcpy(levels->map[3], "12 1  3    5   1");
+            strcpy(levels->map[4], "1  15    1 11  1");
+            strcpy(levels->map[5], "1  1111111 ++ 31");
+            strcpy(levels->map[6], "1111       3   1");
+            strcpy(levels->map[7], "1       11111111");
+            strcpy(levels->map[8], "1   4   4   4  1");
+            strcpy(levels->map[9], "1              1");
+            strcpy(levels->map[10], "1              1");
+            strcpy(levels->map[11], "1111111111111111");
+            break;
+        case 2:
+        /*ERROR: CANNOT STRCPY unicode due to each character being 2bytes
+            strcpy(levels->map[0], "▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋");
+            strcpy(levels->map[1], "▋   ◈          ▋");
+            strcpy(levels->map[2], "▋  ▋▋▋ ▋▋▋▋▋▋▋▋▋");
+            strcpy(levels->map[3], "▋☉ ▋  ◈    ▣   ▋");
+            strcpy(levels->map[4], "▋  ▋▣    ▋ ▋▋  ▋");
+            strcpy(levels->map[5], "▋  ▋▋▋▋▋▋▋ ++ ◈▋");
+            strcpy(levels->map[6], "▋▋▋▋       ◈   ▋");
+            strcpy(levels->map[7], "▋       ▋▋▋▋▋▋▋▋");
+            strcpy(levels->map[8], "▋   +   +   +  ▋");
+            strcpy(levels->map[9], "▋              ▋");
+            strcpy(levels->map[10], "▋              ▋");
+            strcpy(levels->map[11], "▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋▋");
+            */
+            break;
     }
 }
-    
 
 int main(int argc, char* argv[]){
-
     char answer[10];
     srand(time(NULL));
     Player player = player_init();
     Level* level = level_init();
-
+    player.loc.x = level->start.x;
+    player.loc.y = level->start.y;
     cls_screen();
     print_stats(player);
     draw_map(level);
@@ -182,8 +186,30 @@ void print_stats(Player player){
 }
 void draw_map(Level* level){
     int i;
-    for(i = 0; i < 12; i ++)
-        printf("%s\n", level->map[i]);
+    for(i = 0; i < 12; i ++){
+        for(int j = 0; j < 18; j++){
+            switch(level->map[i][j]){
+                case 'P':
+                    printf("%s", PLAYER);
+                    break;
+                case 'T':
+                    printf("%s", TREASURE);
+                    break;
+                case 'E':
+                    printf("%s", ENEMY);
+                    break;
+                case 'H':
+                    printf("%c", '+');
+                    break;
+                case '#':
+                    printf("%s", WALL);
+                    break;
+                default:
+                    printf(" ");
+            }
+        }
+        printf("\n");
+    }
 
 }
 Player collect_treasure(Player player, Level* level){
