@@ -1,0 +1,5 @@
+RLite
+*.exe
+ascii_test
+.vscode/
+*.dSYM/
