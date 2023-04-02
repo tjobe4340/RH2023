@@ -86,7 +86,7 @@ void init_maps(Level* levels){
 int main(int argc, char* argv[]){
 
     char answer[10];
-
+    srand(time(NULL));
     Player player = player_init();
     Level* level = level_init();
 
