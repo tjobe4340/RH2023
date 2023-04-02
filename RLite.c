@@ -3,7 +3,15 @@
 char WALL[] = "\u258B"; // 'Left five eighths block' unicode character
 char PLAYER[] = "\u2609"; // 'sun' unicode character
 char TREASURE[] = "\u25A3"; // 'White square containing small black square' unicode character
-char ENEMY[] = "\u25C8"; // 'White diamond containing small black diamond'
+char ENEMY[] = "\u25C8"; // 'White diamond containing small black diamond' unicode character
+char HEALTH[] = "\u271A"; // 'Heavy Greek cross' unicode character
+
+char WALL_COLOR[] = "\033[38;5;95;48;5;0m";
+char PLAYER_COLOR[] = "\033[38;5;31;48;5;0m";
+char TREASURE_COLOR [] = "\033[38;5;143;48;5;0m";
+char ENEMY_COLOR[] = "\033[38;5;64;48;5;0m";
+char HEALTH_COLOR[] = "\033[38;5;1;48;5;0m";
+char CLEAR_COLOR[] = "\033[0m";
 //possible enemies ⍒,☠
 
 /*
@@ -201,23 +209,23 @@ void draw_map(Level* level){
         for(int j = 0; j < 18; j++){
             switch(level->map[i][j]){
                 case 'P':
-                    printf("%s", PLAYER);
+                    printf("%s%s%s", PLAYER_COLOR, PLAYER, CLEAR_COLOR);
                     break;
                 case 'T':
-                    printf("%s", TREASURE);
+                    printf("%s%s%s", TREASURE_COLOR, TREASURE, CLEAR_COLOR);
                     break;
                 case 'E':
-                    printf("%s", ENEMY);
+                    printf("%s%s%s", ENEMY_COLOR, ENEMY, CLEAR_COLOR);
                     break;
                 case 'H':
-                    printf("%c", '+');
+                    printf("%s%s%s", HEALTH_COLOR, HEALTH, CLEAR_COLOR);
                     break;
                 case '#':
-                    printf("%s", WALL);
+                    printf("%s%s%s", WALL_COLOR, WALL, CLEAR_COLOR);
                     break;
                 //default is printing a ' ' (space) with black background and foreground
                 default:
-                    printf(" ");
+                    printf("\033[38;5;0;48;5;0m \033[0m");
             }
         }
         printf("\n");
