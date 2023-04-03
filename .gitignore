@@ -1,5 +1,5 @@
 RLite
 *.exe
-ascii_test
+ascii_test*
 .vscode/
 *.dSYM/
